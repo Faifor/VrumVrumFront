@@ -3,15 +3,12 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# ARG/ENV объявляем ДО копирования исходников.
-# В продакшн-сборке BASE_URL пустой — nginx на том же хосте проксирует API.
-ARG VITE_API_BASE_URL=""
-ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
-
 COPY package*.json ./
 RUN npm ci
 
-# .env исключён через .dockerignore, поэтому Vite не подхватит localhost-адрес
+# .env копируется вместе с исходниками.
+# На сервере .env содержит VITE_API_BASE_URL=https://api.vrum53.ru —
+# Vite вставит этот URL в бандл при сборке.
 COPY . .
 
 RUN npm run build
