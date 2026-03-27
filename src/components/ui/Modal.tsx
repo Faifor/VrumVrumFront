@@ -9,7 +9,7 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const sizes = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-2xl' }
+const sizes = { sm: 'sm:max-w-sm', md: 'sm:max-w-md', lg: 'sm:max-w-2xl' }
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }: Props) {
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 dark:bg-black/75 backdrop-blur-md animate-fade-in"
@@ -31,15 +31,25 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
       <div
         className={clsx(
           'relative z-10 w-full animate-fade-up',
-          'rounded-2xl shadow-2xl',
+          // Mobile: full-width bottom sheet with top radius only
+          'rounded-t-3xl rounded-b-none',
+          // Desktop: regular centered modal with all rounded corners
+          'sm:rounded-2xl',
+          'shadow-2xl',
           'bg-white dark:bg-slate-900',
           'border border-slate-200 dark:border-slate-700/60',
-          'max-h-[90vh] overflow-y-auto',
+          // Mobile: up to 90% height; desktop: up to 85%
+          'max-h-[90vh] sm:max-h-[85vh] overflow-y-auto',
           sizes[size],
         )}
       >
+        {/* Drag handle (mobile only) */}
+        <div className="flex justify-center pt-3 pb-1 sm:hidden">
+          <div className="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+        </div>
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between px-5 sm:px-6 py-3 sm:py-4 border-b border-slate-100 dark:border-slate-800">
           <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
           <button
             onClick={onClose}
@@ -55,7 +65,9 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
             </svg>
           </button>
         </div>
-        <div className="px-6 py-5">{children}</div>
+
+        {/* Content — extra bottom padding for mobile safe area */}
+        <div className="px-5 sm:px-6 py-5 pb-8 sm:pb-6">{children}</div>
       </div>
     </div>
   )
