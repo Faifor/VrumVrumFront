@@ -23,51 +23,53 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 dark:bg-black/75 backdrop-blur-md animate-fade-in"
+        className="absolute inset-0 bg-black/60 dark:bg-black/75 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
-      {/* Panel */}
+      {/* Sheet / Dialog */}
       <div
         className={clsx(
-          'relative z-10 w-full animate-fade-up',
-          // Mobile: full-width bottom sheet with top radius only
-          'rounded-t-3xl rounded-b-none',
-          // Desktop: regular centered modal with all rounded corners
-          'sm:rounded-2xl',
-          'shadow-2xl',
+          'relative z-10 w-full flex flex-col animate-fade-up',
+          // Mobile: bottom sheet — only top corners rounded, sticks to bottom
+          'rounded-t-3xl sm:rounded-2xl',
+          'max-h-[92vh] sm:max-h-[85vh]',
           'bg-white dark:bg-slate-900',
-          'border border-slate-200 dark:border-slate-700/60',
-          // Mobile: up to 90% height; desktop: up to 85%
-          'max-h-[90vh] sm:max-h-[85vh] overflow-y-auto',
+          'border border-slate-200/80 dark:border-slate-700/60',
+          'shadow-2xl',
           sizes[size],
         )}
       >
-        {/* Drag handle (mobile only) */}
-        <div className="flex justify-center pt-3 pb-1 sm:hidden">
+        {/* Drag handle — visible only on mobile */}
+        <div className="flex-none flex justify-center pt-3 sm:hidden" aria-hidden>
           <div className="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
         </div>
 
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 sm:px-6 py-3 sm:py-4 border-b border-slate-100 dark:border-slate-800">
+        {/* Header — fixed, never scrolls */}
+        <div className="flex-none flex items-center justify-between px-5 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-800">
           <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
           <button
             onClick={onClose}
             className={clsx(
-              'p-1.5 rounded-lg transition-all duration-150',
+              'p-2 -mr-1 rounded-xl transition-all duration-150',
               'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200',
               'hover:bg-slate-100 dark:hover:bg-slate-800',
-              'active:scale-95',
+              'active:scale-90',
             )}
+            aria-label="Закрыть"
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        {/* Content — extra bottom padding for mobile safe area */}
-        <div className="px-5 sm:px-6 py-5 pb-8 sm:pb-6">{children}</div>
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-6 py-5">
+          {children}
+          {/* Extra bottom padding for mobile home indicator */}
+          <div className="h-4 sm:h-0" aria-hidden />
+        </div>
       </div>
     </div>
   )

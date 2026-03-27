@@ -360,63 +360,55 @@ export default function AdminUserDetail() {
 
       {/* ── Create contract modal ─────────────────────────────── */}
       <Modal isOpen={createContractModal} onClose={() => setCreateContractModal(false)} title="Создать договор">
-        <form onSubmit={createContractForm.handleSubmit(handleCreateContract)} className="flex flex-col gap-4">
+        <form onSubmit={createContractForm.handleSubmit(handleCreateContract)} className="flex flex-col gap-3.5">
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Все поля опциональны — можно заполнить позже через редактирование.
+            Все поля опциональны — можно заполнить позже.
           </p>
           <Input label="Серийный номер велосипеда" {...createContractForm.register('bike_serial')} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="АКБ 1" {...createContractForm.register('akb1_serial')} />
-            <Input label="АКБ 2" {...createContractForm.register('akb2_serial')} />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Количество недель" type="number" {...createContractForm.register('weeks_count')} />
-            <Input label="Дата начала"       type="date"   {...createContractForm.register('filled_date')} />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button type="submit" isLoading={actionLoading} className="w-full sm:w-auto">Создать</Button>
-            <Button type="button" variant="secondary" onClick={() => setCreateContractModal(false)} className="w-full sm:w-auto">Отмена</Button>
+          <Input label="АКБ 1" {...createContractForm.register('akb1_serial')} />
+          <Input label="АКБ 2" {...createContractForm.register('akb2_serial')} />
+          <Input label="Количество недель" type="number" {...createContractForm.register('weeks_count')} />
+          <Input label="Дата начала"       type="date"   {...createContractForm.register('filled_date')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={actionLoading} className="w-full">Создать</Button>
+            <Button type="button" variant="secondary" onClick={() => setCreateContractModal(false)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
 
       {/* ── Reject modal ─────────────────────────────────────── */}
       <Modal isOpen={rejectModal} onClose={() => setRejectModal(false)} title="Причина отклонения">
-        <form onSubmit={rejectForm.handleSubmit(handleReject)} className="flex flex-col gap-4">
+        <form onSubmit={rejectForm.handleSubmit(handleReject)} className="flex flex-col gap-3.5">
           <Input
-            label="Причина"
+            label="Причина *"
             error={rejectForm.formState.errors.reason?.message}
             {...rejectForm.register('reason')}
           />
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button type="submit" variant="danger" isLoading={actionLoading} className="w-full sm:w-auto">Отклонить</Button>
-            <Button type="button" variant="secondary" onClick={() => setRejectModal(false)} className="w-full sm:w-auto">Отмена</Button>
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" variant="danger" isLoading={actionLoading} className="w-full">Отклонить</Button>
+            <Button type="button" variant="secondary" onClick={() => setRejectModal(false)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
 
       {/* ── Edit contract modal ───────────────────────────────── */}
       <Modal isOpen={!!contractModal} onClose={() => setContractModal(null)} title="Редактировать договор">
-        <form onSubmit={contractForm.handleSubmit(handleUpdateContract)} className="flex flex-col gap-4">
+        <form onSubmit={contractForm.handleSubmit(handleUpdateContract)} className="flex flex-col gap-3.5">
           <Input label="Серийный номер велосипеда" {...contractForm.register('bike_serial')} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="АКБ 1" {...contractForm.register('akb1_serial')} />
-            <Input label="АКБ 2" {...contractForm.register('akb2_serial')} />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Количество недель" type="number" {...contractForm.register('weeks_count')} />
-            <Input label="Дата начала"       type="date"   {...contractForm.register('filled_date')} />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button type="submit" isLoading={actionLoading} className="w-full sm:w-auto">Сохранить</Button>
-            <Button type="button" variant="secondary" onClick={() => setContractModal(null)} className="w-full sm:w-auto">Отмена</Button>
+          <Input label="АКБ 1" {...contractForm.register('akb1_serial')} />
+          <Input label="АКБ 2" {...contractForm.register('akb2_serial')} />
+          <Input label="Количество недель" type="number" {...contractForm.register('weeks_count')} />
+          <Input label="Дата начала"       type="date"   {...contractForm.register('filled_date')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={actionLoading} className="w-full">Сохранить</Button>
+            <Button type="button" variant="secondary" onClick={() => setContractModal(null)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
 
       {/* ── Return act modal ─────────────────────────────────── */}
       <Modal isOpen={returnActModal !== null} onClose={() => setReturnActModal(null)} title="Создать акт возврата">
-        <form onSubmit={returnActForm.handleSubmit(handleCreateReturnAct)} className="flex flex-col gap-4">
+        <form onSubmit={returnActForm.handleSubmit(handleCreateReturnAct)} className="flex flex-col gap-3.5">
           {/* Checkboxes */}
           <div className="rounded-xl border border-slate-200 dark:border-slate-700/60 divide-y divide-slate-100 dark:divide-slate-700/40">
             {([
@@ -424,10 +416,10 @@ export default function AdminUserDetail() {
               ['is_fix_AKB_1', 'АКБ 1 требует ремонта'],
               ['is_fix_AKB_2', 'АКБ 2 требует ремонта'],
             ] as const).map(([field, label]) => (
-              <label key={field} className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors first:rounded-t-xl last:rounded-b-xl">
+              <label key={field} className="flex items-center gap-3 px-4 py-3.5 text-sm text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800 transition-colors first:rounded-t-xl last:rounded-b-xl select-none">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-slate-300 dark:border-slate-600 accent-brand-500 shrink-0"
+                  className="h-5 w-5 rounded border-slate-300 dark:border-slate-600 accent-brand-500 shrink-0"
                   {...returnActForm.register(field)}
                 />
                 {label}
@@ -435,13 +427,11 @@ export default function AdminUserDetail() {
             ))}
           </div>
           <Input label="Описание повреждений" {...returnActForm.register('damage_description')} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Сумма ущерба (₽)"        type="number" {...returnActForm.register('damage_amount')} />
-            <Input label="Срок задолженности (дней)" type="number" {...returnActForm.register('debt_term_days')} />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button type="submit" isLoading={actionLoading} className="w-full sm:w-auto">Создать акт</Button>
-            <Button type="button" variant="secondary" onClick={() => setReturnActModal(null)} className="w-full sm:w-auto">Отмена</Button>
+          <Input label="Сумма ущерба (₽)"           type="number" {...returnActForm.register('damage_amount')} />
+          <Input label="Срок задолженности (дней)"  type="number" {...returnActForm.register('debt_term_days')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={actionLoading} className="w-full">Создать акт</Button>
+            <Button type="button" variant="secondary" onClick={() => setReturnActModal(null)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>

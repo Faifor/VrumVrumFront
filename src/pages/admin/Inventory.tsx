@@ -231,12 +231,10 @@ function BikesTab() {
       </div>
 
       <Modal isOpen={modal !== null} onClose={() => setModal(null)} title={modal === 'new' ? 'Добавить велосипед' : 'Редактировать велосипед'}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Номер" error={form.formState.errors.number?.message} {...form.register('number')} />
-            <Input label="VIN"   error={form.formState.errors.vin?.message}    {...form.register('vin')} />
-          </div>
-          <Input label="Название" error={form.formState.errors.name?.message} {...form.register('name')} />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+          <Input label="Номер *" error={form.formState.errors.number?.message} {...form.register('number')} />
+          <Input label="VIN *"   error={form.formState.errors.vin?.message}    {...form.register('vin')} />
+          <Input label="Название *" error={form.formState.errors.name?.message} {...form.register('name')} />
           <Input label="Описание" {...form.register('description')} />
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Статус</label>
@@ -246,18 +244,14 @@ function BikesTab() {
               ))}
             </select>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Тип (type_id)"        type="number" {...form.register('type_id')} />
-            <Input label="Локация (location_id)" type="number" {...form.register('location_id')} />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Input label="Дата покупки" type="date" {...form.register('purchase_date')} />
-            <Input label="Последнее ТО" type="date" {...form.register('last_service_date')} />
-            <Input label="Следующее ТО" type="date" {...form.register('next_service_date')} />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <Button type="submit" isLoading={loading} className="w-full sm:w-auto">Сохранить</Button>
-            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full sm:w-auto">Отмена</Button>
+          <Input label="Тип (type_id)"        type="number" {...form.register('type_id')} />
+          <Input label="Локация (location_id)" type="number" {...form.register('location_id')} />
+          <Input label="Дата покупки"  type="date" {...form.register('purchase_date')} />
+          <Input label="Последнее ТО"  type="date" {...form.register('last_service_date')} />
+          <Input label="Следующее ТО"  type="date" {...form.register('next_service_date')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={loading} className="w-full">Сохранить</Button>
+            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
@@ -320,16 +314,12 @@ function BatteriesTab() {
       </div>
 
       <Modal isOpen={modal !== null} onClose={() => setModal(null)} title={modal === 'new' ? 'Добавить АКБ' : 'Редактировать АКБ'}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Номер"    {...form.register('number')} />
-            <Input label="Название" {...form.register('name')} />
-          </div>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+          <Input label="Номер *"    {...form.register('number')} />
+          <Input label="Название *" {...form.register('name')} />
           <Input label="Описание" {...form.register('description')} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Напряжение (V)" type="number" {...form.register('voltage')} />
-            <Input label="Ёмкость (Ah)"  type="number" {...form.register('capacity')} />
-          </div>
+          <Input label="Напряжение (V)" type="number" {...form.register('voltage')} />
+          <Input label="Ёмкость (Ah)"  type="number" {...form.register('capacity')} />
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Статус</label>
             <select className={selectCls} {...form.register('status')}>
@@ -338,13 +328,11 @@ function BatteriesTab() {
               ))}
             </select>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Дата покупки"          type="date"   {...form.register('purchase_date')} />
-            <Input label="Локация (location_id)"  type="number" {...form.register('location_id')} />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <Button type="submit" isLoading={loading} className="w-full sm:w-auto">Сохранить</Button>
-            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full sm:w-auto">Отмена</Button>
+          <Input label="Дата покупки"          type="date"   {...form.register('purchase_date')} />
+          <Input label="Локация (location_id)"  type="number" {...form.register('location_id')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={loading} className="w-full">Сохранить</Button>
+            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
@@ -397,12 +385,12 @@ function LocationsTab() {
         {locations.length === 0 && <p className="text-center py-10 text-slate-400 dark:text-slate-600">Нет локаций</p>}
       </div>
       <Modal isOpen={modal !== null} onClose={() => setModal(null)} title={modal === 'new' ? 'Новая локация' : 'Редактировать локацию'}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
-          <Input label="Название" error={form.formState.errors.name?.message}    {...form.register('name')} />
-          <Input label="Адрес"    error={form.formState.errors.address?.message} {...form.register('address')} />
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <Button type="submit" isLoading={loading} className="w-full sm:w-auto">Сохранить</Button>
-            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full sm:w-auto">Отмена</Button>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+          <Input label="Название *" error={form.formState.errors.name?.message}    {...form.register('name')} />
+          <Input label="Адрес *"    error={form.formState.errors.address?.message} {...form.register('address')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={loading} className="w-full">Сохранить</Button>
+            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
@@ -473,17 +461,15 @@ function PricingTab() {
         </table>
       </div>
       <Modal isOpen={modal !== null} onClose={() => setModal(null)} title={modal === 'new' ? 'Новый тариф' : 'Редактировать тариф'}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
-          <Input label="Название типа" error={form.formState.errors.name_type?.message} {...form.register('name_type')} />
-          <Input label="Type ID"       type="number" error={form.formState.errors.type_id?.message} {...form.register('type_id')} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input label="Мин. недель" type="number" {...form.register('min_weeks_count')} />
-            <Input label="Макс. недель" type="number" {...form.register('max_weeks_count')} />
-          </div>
-          <Input label="Цена за неделю (₽)" type="number" {...form.register('amount_weeks')} />
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <Button type="submit" isLoading={loading} className="w-full sm:w-auto">Сохранить</Button>
-            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full sm:w-auto">Отмена</Button>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+          <Input label="Название типа *" error={form.formState.errors.name_type?.message} {...form.register('name_type')} />
+          <Input label="Type ID *"       type="number" error={form.formState.errors.type_id?.message} {...form.register('type_id')} />
+          <Input label="Мин. недель *"   type="number" {...form.register('min_weeks_count')} />
+          <Input label="Макс. недель *"  type="number" {...form.register('max_weeks_count')} />
+          <Input label="Цена за неделю (₽) *" type="number" {...form.register('amount_weeks')} />
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" isLoading={loading} className="w-full">Сохранить</Button>
+            <Button type="button" variant="secondary" onClick={() => setModal(null)} className="w-full">Отмена</Button>
           </div>
         </form>
       </Modal>
