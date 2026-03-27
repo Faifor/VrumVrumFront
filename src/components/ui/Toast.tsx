@@ -4,12 +4,7 @@ import clsx from 'clsx'
 
 type ToastType = 'success' | 'error' | 'info'
 
-interface Toast {
-  id: number
-  message: string
-  type: ToastType
-}
-
+interface Toast { id: number; message: string; type: ToastType }
 interface ToastState {
   toasts: Toast[]
   add: (message: string, type?: ToastType) => void
@@ -30,44 +25,75 @@ export const useToastStore = create<ToastState>((set) => ({
 
 export const toast = {
   success: (msg: string) => useToastStore.getState().add(msg, 'success'),
-  error: (msg: string) => useToastStore.getState().add(msg, 'error'),
-  info: (msg: string) => useToastStore.getState().add(msg, 'info'),
+  error:   (msg: string) => useToastStore.getState().add(msg, 'error'),
+  info:    (msg: string) => useToastStore.getState().add(msg, 'info'),
 }
 
-const typeStyles: Record<ToastType, string> = {
-  success: 'bg-green-600 text-white',
-  error: 'bg-red-600 text-white',
-  info: 'bg-gray-800 text-white',
+const typeConfig: Record<ToastType, { base: string; icon: React.ReactNode }> = {
+  success: {
+    base: 'bg-emerald-500 dark:bg-emerald-600',
+    icon: (
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </span>
+    ),
+  },
+  error: {
+    base: 'bg-red-500 dark:bg-red-600',
+    icon: (
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </span>
+    ),
+  },
+  info: {
+    base: 'bg-slate-800 dark:bg-slate-700',
+    icon: (
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/15">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </span>
+    ),
+  },
 }
 
 export function ToastContainer() {
   const { toasts, remove } = useToastStore()
   return (
-    <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 max-w-sm w-full px-4 sm:px-0">
-      {toasts.map((t) => (
-        <div
-          key={t.id}
-          className={clsx(
-            'flex items-start gap-3 rounded-xl px-4 py-3 shadow-lg',
-            'animate-in slide-in-from-bottom-2 duration-200',
-            typeStyles[t.type],
-          )}
-        >
-          <span className="flex-1 text-sm leading-snug">{t.message}</span>
-          <button onClick={() => remove(t.id)} className="mt-0.5 opacity-70 hover:opacity-100">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      ))}
+    <div className="fixed bottom-20 right-3 z-[200] flex flex-col gap-2 w-[calc(100%-1.5rem)] max-w-xs sm:bottom-5 sm:right-5 sm:w-80">
+      {toasts.map((t) => {
+        const cfg = typeConfig[t.type]
+        return (
+          <div
+            key={t.id}
+            className={clsx(
+              'flex items-center gap-3 rounded-2xl pl-3 pr-4 py-3',
+              'text-white shadow-xl animate-fade-up',
+              cfg.base,
+            )}
+          >
+            {cfg.icon}
+            <span className="flex-1 text-sm font-medium leading-snug">{t.message}</span>
+            <button
+              onClick={() => remove(t.id)}
+              className="opacity-50 hover:opacity-100 transition-opacity p-0.5"
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )
+      })}
     </div>
   )
 }
 
-// Hook for auto-removing error on unmount
 export function useAutoError(error: string | null) {
-  useEffect(() => {
-    if (error) toast.error(error)
-  }, [error])
+  useEffect(() => { if (error) toast.error(error) }, [error])
 }

@@ -12,20 +12,36 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/auth': 'http://localhost:8000',
-      '/users': 'http://localhost:8000',
-      '/admin': {
+      '/auth': {
         target: 'http://localhost:8000',
-        // Browser page refreshes send Accept: text/html — serve SPA instead of proxying to backend.
-        // Axios API calls always carry Authorization header — proxy those to FastAPI.
+        // Browser page refreshes (Accept: text/html) must be served by SPA, not proxied.
+        // Axios API calls send Accept: application/json — proxy those to FastAPI.
         bypass(req) {
-          const accept = req.headers['accept'] ?? ''
-          const hasAuth = !!req.headers['authorization']
-          if (accept.includes('text/html') && !hasAuth) return '/index.html'
+          if (req.headers['accept']?.includes('text/html')) return '/index.html'
           return null
         },
       },
-      '/api': 'http://localhost:8000',
+      '/users': {
+        target: 'http://localhost:8000',
+        bypass(req) {
+          if (req.headers['accept']?.includes('text/html')) return '/index.html'
+          return null
+        },
+      },
+      '/admin': {
+        target: 'http://localhost:8000',
+        bypass(req) {
+          if (req.headers['accept']?.includes('text/html')) return '/index.html'
+          return null
+        },
+      },
+      '/api': {
+        target: 'http://localhost:8000',
+        bypass(req) {
+          if (req.headers['accept']?.includes('text/html')) return '/index.html'
+          return null
+        },
+      },
       '/health': 'http://localhost:8000',
     },
   },

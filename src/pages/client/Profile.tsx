@@ -28,11 +28,7 @@ type FormData = z.infer<typeof schema>
 function splitFullName(full: string | null) {
   if (!full) return { last_name: '', first_name: '', patronymic: '' }
   const parts = full.trim().split(/\s+/)
-  return {
-    last_name: parts[0] ?? '',
-    first_name: parts[1] ?? '',
-    patronymic: parts.slice(2).join(' ') ?? '',
-  }
+  return { last_name: parts[0] ?? '', first_name: parts[1] ?? '', patronymic: parts.slice(2).join(' ') ?? '' }
 }
 
 export default function ProfilePage() {
@@ -46,8 +42,6 @@ export default function ProfilePage() {
     resolver: zodResolver(schema),
   })
 
-
-  // Pre-fill form from me
   useEffect(() => {
     if (me) {
       const name = splitFullName(me.full_name)
@@ -102,43 +96,36 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-lg">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Анкета</h1>
+        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Анкета</h1>
         {me?.status && <StatusBadge status={me.status} />}
       </div>
 
+      {/* Rejection reason */}
       {me?.status === 'rejected' && me.rejection_reason && (
-        <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-700">
+        <div className="rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 p-4 text-sm text-red-700 dark:text-red-400">
           <strong>Причина отклонения: </strong>{me.rejection_reason}
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSave)} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Input label="Фамилия" disabled={!isEditable} error={errors.last_name?.message} {...register('last_name')} />
-          <Input label="Имя" disabled={!isEditable} error={errors.first_name?.message} {...register('first_name')} />
+          <Input label="Фамилия"  disabled={!isEditable} error={errors.last_name?.message}  {...register('last_name')} />
+          <Input label="Имя"      disabled={!isEditable} error={errors.first_name?.message} {...register('first_name')} />
           <Input label="Отчество" disabled={!isEditable} error={errors.patronymic?.message} {...register('patronymic')} />
         </div>
         <Input label="ИНН" disabled={!isEditable} inputMode="numeric" hint="12 цифр" error={errors.inn?.message} {...register('inn')} />
         <Input label="Адрес регистрации" disabled={!isEditable} error={errors.registration_address?.message} {...register('registration_address')} />
-        <Input label="Адрес проживания" disabled={!isEditable} error={errors.residential_address?.message} {...register('residential_address')} />
+        <Input label="Адрес проживания"  disabled={!isEditable} error={errors.residential_address?.message}  {...register('residential_address')} />
         <Input label="Серия и номер паспорта" disabled={!isEditable} inputMode="numeric" hint="10 цифр без пробелов" error={errors.passport?.message} {...register('passport')} />
         <Input label="Телефон" disabled={!isEditable} hint="+79991234567" error={errors.phone?.message} {...register('phone')} />
         <Input label="Номер банковского счёта" disabled={!isEditable} inputMode="numeric" hint="20 цифр" error={errors.bank_account?.message} {...register('bank_account')} />
 
-        {/* Sticky action bar */}
         {isEditable && (
-          <div className="sticky bottom-0 -mx-4 px-4 pb-4 pt-3 bg-white/90 backdrop-blur border-t flex gap-3 mt-2">
-            <Button type="submit" variant="secondary" isLoading={isLoading}>
-              Сохранить
-            </Button>
-            <Button
-              type="button"
-              onClick={onSubmit}
-              isLoading={submitting}
-            >
-              Отправить на проверку
-            </Button>
+          <div className="sticky bottom-0 -mx-4 px-4 pb-4 pt-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-t border-slate-200 dark:border-slate-800 flex gap-3 mt-2">
+            <Button type="submit" variant="secondary" isLoading={isLoading}>Сохранить</Button>
+            <Button type="button" onClick={onSubmit} isLoading={submitting}>Отправить на проверку</Button>
           </div>
         )}
       </form>

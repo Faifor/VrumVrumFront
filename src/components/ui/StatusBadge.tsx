@@ -3,25 +3,20 @@ import type { DocumentStatus, ContractPaymentStatus, AssetStatus } from '@/types
 
 type AnyStatus = DocumentStatus | ContractPaymentStatus | AssetStatus | string
 
-const statusConfig: Record<string, { label: string; className: string }> = {
-  // Document statuses
-  draft: { label: 'Черновик', className: 'bg-gray-100 text-gray-700' },
-  pending: { label: 'На проверке', className: 'bg-yellow-100 text-yellow-800' },
-  approved: { label: 'Одобрено', className: 'bg-green-100 text-green-800' },
-  rejected: { label: 'Отклонено', className: 'bg-red-100 text-red-800' },
-
-  // Payment statuses
-  processing: { label: 'Обрабатывается', className: 'bg-blue-100 text-blue-800' },
-  paid: { label: 'Оплачено', className: 'bg-green-100 text-green-800' },
-  failed: { label: 'Не оплачено', className: 'bg-red-100 text-red-800' },
-  succeeded: { label: 'Успешно', className: 'bg-green-100 text-green-800' },
-  canceled: { label: 'Отменено', className: 'bg-gray-100 text-gray-600' },
-
-  // Asset statuses
-  free: { label: 'Свободен', className: 'bg-green-100 text-green-800' },
-  rented: { label: 'В аренде', className: 'bg-blue-100 text-blue-800' },
-  repair: { label: 'На ремонте', className: 'bg-orange-100 text-orange-800' },
-  decommissioned: { label: 'Списан', className: 'bg-gray-100 text-gray-500' },
+const statusConfig: Record<string, { label: string; dot: string; className: string }> = {
+  draft:          { label: 'Черновик',       dot: 'bg-slate-400',                         className: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
+  pending:        { label: 'На проверке',    dot: 'bg-amber-400 animate-pulse',            className: 'bg-amber-50  text-amber-700  dark:bg-amber-950/50  dark:text-amber-400' },
+  approved:       { label: 'Одобрено',       dot: 'bg-emerald-400',                        className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400' },
+  rejected:       { label: 'Отклонено',      dot: 'bg-red-400',                            className: 'bg-red-50  text-red-700  dark:bg-red-950/50  dark:text-red-400' },
+  processing:     { label: 'Обрабатывается', dot: 'bg-blue-400 animate-pulse',             className: 'bg-blue-50  text-blue-700  dark:bg-blue-950/50  dark:text-blue-400' },
+  paid:           { label: 'Оплачено',       dot: 'bg-emerald-400',                        className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400' },
+  failed:         { label: 'Не оплачено',    dot: 'bg-red-400',                            className: 'bg-red-50  text-red-700  dark:bg-red-950/50  dark:text-red-400' },
+  succeeded:      { label: 'Успешно',        dot: 'bg-emerald-400',                        className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400' },
+  canceled:       { label: 'Отменено',       dot: 'bg-slate-400',                          className: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-500' },
+  free:           { label: 'Свободен',       dot: 'bg-emerald-400',                        className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400' },
+  rented:         { label: 'В аренде',       dot: 'bg-blue-400',                           className: 'bg-blue-50  text-blue-700  dark:bg-blue-950/50  dark:text-blue-400' },
+  repair:         { label: 'На ремонте',     dot: 'bg-amber-400',                          className: 'bg-amber-50  text-amber-700  dark:bg-amber-950/50  dark:text-amber-400' },
+  decommissioned: { label: 'Списан',         dot: 'bg-slate-300',                          className: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-600' },
 }
 
 interface Props {
@@ -30,9 +25,20 @@ interface Props {
 }
 
 export default function StatusBadge({ status, className }: Props) {
-  const cfg = statusConfig[status] ?? { label: status, className: 'bg-gray-100 text-gray-700' }
+  const cfg = statusConfig[status] ?? {
+    label: status,
+    dot: 'bg-slate-400',
+    className: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+  }
   return (
-    <span className={clsx('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', cfg.className, className)}>
+    <span
+      className={clsx(
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium',
+        cfg.className,
+        className,
+      )}
+    >
+      <span className={clsx('h-1.5 w-1.5 rounded-full shrink-0', cfg.dot)} />
       {cfg.label}
     </span>
   )

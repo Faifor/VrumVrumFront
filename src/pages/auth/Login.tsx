@@ -9,22 +9,19 @@ import Input from '@/components/ui/Input'
 import { toast } from '@/components/ui/Toast'
 
 const schema = z.object({
-  email: z.string().email('Введите корректный email'),
+  email:    z.string().email('Введите корректный email'),
   password: z.string().min(1, 'Введите пароль'),
 })
-
 type FormData = z.infer<typeof schema>
 
 export default function LoginPage() {
   const { login, isLoading } = useAuthStore()
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate  = useNavigate()
+  const location  = useLocation()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  })
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -37,44 +34,77 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-brand-600">Vrum</h1>
-          <p className="mt-1 text-sm text-gray-500">Войдите в личный кабинет</p>
-        </div>
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-navy-900 px-4">
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <Input
-            label="Email"
-            type="email"
-            autoComplete="email"
-            error={errors.email?.message}
-            {...register('email')}
-          />
-          <Input
-            label="Пароль"
-            type="password"
-            autoComplete="current-password"
-            error={errors.password?.message}
-            {...register('password')}
-          />
+      {/* ── Animated background blobs ─────────────────────────── */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="absolute -top-1/4 -right-1/4 h-[600px] w-[600px] rounded-full bg-brand-400/10 dark:bg-brand-600/8 blur-3xl animate-float" />
+        <div className="absolute -bottom-1/4 -left-1/4 h-[500px] w-[500px] rounded-full bg-indigo-400/8 dark:bg-indigo-600/8 blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[300px] rounded-full bg-brand-300/6 dark:bg-brand-500/6 blur-2xl" />
+      </div>
 
-          <Button type="submit" isLoading={isLoading} className="w-full mt-2">
-            Войти
-          </Button>
-        </form>
+      {/* ── Card ─────────────────────────────────────────────── */}
+      <div className="relative w-full max-w-[380px] animate-scale-up">
+        <div className="rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/40 shadow-2xl dark:shadow-black/40 p-8">
 
-        <div className="mt-4 flex flex-col gap-2 text-center text-sm">
-          <Link to="/auth/forgot-password" className="text-brand-600 hover:underline">
-            Забыли пароль?
-          </Link>
-          <span className="text-gray-400">
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 shadow-brand-lg mb-4">
+              <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+              Добро пожаловать
+            </h1>
+            <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
+              Войдите в личный кабинет Vrum
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <Input
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
+            <Input
+              label="Пароль"
+              type="password"
+              autoComplete="current-password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              {...register('password')}
+            />
+
+            <div className="flex justify-end -mt-1">
+              <Link
+                to="/auth/forgot-password"
+                className="text-xs text-brand-600 dark:text-brand-400 hover:underline"
+              >
+                Забыли пароль?
+              </Link>
+            </div>
+
+            <Button type="submit" isLoading={isLoading} size="lg" className="w-full">
+              Войти
+            </Button>
+          </form>
+
+          {/* Footer */}
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
             Нет аккаунта?{' '}
-            <Link to="/auth/register" className="text-brand-600 hover:underline">
+            <Link
+              to="/auth/register"
+              className="font-semibold text-brand-600 dark:text-brand-400 hover:underline"
+            >
               Зарегистрироваться
             </Link>
-          </span>
+          </p>
         </div>
       </div>
     </div>

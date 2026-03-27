@@ -32,21 +32,48 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8">
-        <h1 className="text-xl font-bold text-gray-900 mb-1">Сброс пароля</h1>
-        <p className="text-sm text-gray-500 mb-6">Введите email, и мы отправим код для сброса пароля.</p>
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-navy-900 px-4">
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <Input label="Email" type="email" error={errors.email?.message} {...register('email')} />
-          <Button type="submit" isLoading={loading} className="w-full">
-            Отправить код
-          </Button>
-        </form>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="absolute -top-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-brand-400/10 dark:bg-brand-600/8 blur-3xl animate-float" />
+        <div className="absolute -bottom-1/4 -left-1/4 h-[400px] w-[400px] rounded-full bg-indigo-400/8 dark:bg-indigo-600/8 blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+      </div>
 
-        <p className="mt-4 text-center text-sm text-gray-400">
-          <Link to="/auth/login" className="text-brand-600 hover:underline">← Вернуться к входу</Link>
-        </p>
+      <div className="relative w-full max-w-[380px] animate-scale-up">
+        <div className="rounded-3xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl border border-slate-200/60 dark:border-slate-700/40 shadow-2xl dark:shadow-black/40 p-8">
+
+          <div className="text-center mb-7">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 shadow-brand-lg mb-3">
+              <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+              </svg>
+            </div>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white">Сброс пароля</h1>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              Введите email — отправим код для сброса
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <Input
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
+            <Button type="submit" isLoading={loading} size="lg" className="w-full">
+              Отправить код
+            </Button>
+          </form>
+
+          <p className="mt-5 text-center text-sm text-slate-500 dark:text-slate-400">
+            <Link to="/auth/login" className="font-semibold text-brand-600 dark:text-brand-400 hover:underline">
+              ← Вернуться к входу
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
